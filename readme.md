@@ -67,4 +67,18 @@ python manage.py runserver
 
 Visit http://127.0.0.1:8000/ in your web browser to see the project in action.
 
+### 8. Get the Endpoints Documentation using OpenAi
 
+Visit http://127.0.0.1:8000/api/swagger/ in your web browser to see the endpoints.
+
+
+
+### Key Sections Explained:
+1. **Prerequisites**: Lists necessary software and tools.
+2. **Getting Started**: Detailed steps for setting up the project.
+3. **Environment Variables**: Guide to setting up environment-specific configurations.
+4. **Database Setup**: Instructions for initializing the database.
+5. **Running the Project**: Steps to run the Django server and access the project.
+6. **Documentation and Contact**: Information about API documentation and how to reach out for support.
+
+This `README.md` provides a clear, structured guide to setting up and running your Django project.
