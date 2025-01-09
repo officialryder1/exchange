@@ -18,6 +18,7 @@ Ensure you have the following installed on your machine:
 ```bash
 git clone https://github.com/your-repo/your-project.git
 cd your-project
+```
 
 
 ### 2. Set Up a Virtual Environment
@@ -25,13 +26,13 @@ cd your-project
 ```bash
 python -m venv venv
 source venv/bin/activate  # On Windows: venv\Scripts\activate
-
+```
 
 ### 3. Install Dependencies 
 
-``bash
+```bash
 pip install -r requirements.txt
-
+```
 ### 4 Configure Environment Variable
 
 Create a .env file in the project root directory and add the following variables:
@@ -48,22 +49,22 @@ Ensure your database is running and then run the following commands to apply mig
 ```bash
 python manage.py makemigrations
 python manage.py migrate
+```
 
-
-
-###a 6 Create a SuperUser
+### 6 Create a SuperUser
 
 Create an admin user to access the Django admin interface.(optional)
 
 ```bash
 python manage.py createsuperuser
-
+```
 
 ### 7 Run the Development Server
 Start the Django development server.
 
 ```bash
 python manage.py runserver
+```
 
 Visit http://127.0.0.1:8000/ in your web browser to see the project in action.
 
