@@ -1,6 +1,6 @@
 from django.shortcuts import render
-from .models import User
-from .serializer import UserSerializer, LoginSerializer
+from .models import User, KYC
+from .serializer import UserSerializer, LoginSerializer, KYCSerializer
 from rest_framework import viewsets, status
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -47,3 +47,4 @@ class LoginView(APIView):
                 'access': str(refresh.access_token),
             }, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    

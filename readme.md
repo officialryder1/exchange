@@ -16,7 +16,7 @@ Ensure you have the following installed on your machine:
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/your-repo/your-project.git
+git clone https://github.com/officialryder1/exchange_backend.git
 cd your-project
 ```
 
