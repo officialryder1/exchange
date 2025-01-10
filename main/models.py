@@ -68,3 +68,16 @@ class KYC(models.Model):
 
     def __str__(self):
         return f"{self.user.email} KYC Status: {self.verification_status}"
+    
+
+class ChatSession(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    is_active = models.BooleanField(default=True)
+
+class Message(models.Model):
+    chat_session = models.ForeignKey(ChatSession, on_delete=models.CASCADE, related_name="message")
+    sender = models.ForeignKey(User, on_delete=models.Case)
+    message = models.TextField()
+    timestamp = models.DateTimeField(auto_now_add=True)
+    is_customer_care = models.BooleanField(default=False)
