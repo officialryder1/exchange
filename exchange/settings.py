@@ -183,5 +183,7 @@ PUSHER_KEY = config('PUSHER_KEY')
 PUSHER_SECRET = config('PUSHER_SECRET')
 PUSHER_CLUSTER = config('PUSHER_CLUSTER')
 
+SECRET = config("SECRET")
+JWT_ALGORITHM = config('JWT_ALGORITHM')
 
 # EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

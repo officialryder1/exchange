@@ -14,6 +14,9 @@ import random
 from .pusher import pusher_client
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
+from .auths import decode_access_token
+from django.contrib.auth import get_user_model
+from rest_framework_simplejwt.tokens import AccessToken
 
 logger = logging.getLogger(__name__)
 
@@ -51,8 +54,31 @@ class LoginView(APIView):
                 'refresh': str(refresh),
                 'access': str(refresh.access_token),
             }, status=status.HTTP_200_OK)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response(serializer
+        .errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    def get(self, request):
+        token = request.data.get('token')
+        if not token:
+            return Response({"error": "Token is required!"}, status=status.HTTP_400_BAD_REQUEST)
+        
+        try:
+            access_token = AccessToken(token)
+            user_id = access_token['user_id']
+            user = User.objects.get(id=user_id)
 
+            # Get KYC status
+            kyc_status = "Not Submitted"
+            if hasattr(user, 'kyc'):
+                kyc_status = user.kyc.verification_status
+
+            return Response({
+                "user_id": user.id,
+                "email": user.email,
+                'kyc_status': kyc_status
+            }, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
 
 # class SendMailView(APIView):
