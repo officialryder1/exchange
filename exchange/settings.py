@@ -178,5 +178,10 @@ EMAIL_USE_TLS = True  # or EMAIL_USE_SSL for port 465
 EMAIL_HOST_USER = config('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = config("EMAIL_HOST_PASSWORD")
 
+PUSHER_APP_ID = config('PUSHER_APP_ID')
+PUSHER_KEY = config('PUSHER_KEY')
+PUSHER_SECRET = config('PUSHER_SECRET')
+PUSHER_CLUSTER = config('PUSHER_CLUSTER')
+
 
 # EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

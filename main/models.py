@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser, BaseUserManager, PermissionsMixin
+from .pusher import pusher_client
 
 class CustomUserManager(BaseUserManager):
     def create_user(self, email, password=None, **extra_fields):
@@ -58,7 +59,7 @@ class KYC(models.Model):
     address = models.TextField()
     identification_number = models.CharField(max_length=50)
     identification_type = models.CharField(max_length=50)
-    id_document = models.FileField(upload_to="kyc_documents/", blank=True, null=True)
+   
     verification_status = models.CharField(
         max_length=20,
         choices=[('PENDING', 'Pending'), ('APPROVED', 'Approved'), ('REJECTED', 'Rejected')], default='PENDING'
@@ -69,11 +70,21 @@ class KYC(models.Model):
     def __str__(self):
         return f"{self.user.email} KYC Status: {self.verification_status}"
     
+class KYCDocument(models.Model):
+    kyc = models.ForeignKey(KYC, on_delete=models.CASCADE, related_name="document")
+    id_document = models.FileField(upload_to="kyc_document", blank=True, null=True)
+    uploaded_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Document for {self.kyc.user.email}"
 
 class ChatSession(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     is_active = models.BooleanField(default=True)
+
+    def __str__(self):
+        return f"{self.user.email} created a session at {self.created_at}"
 
 class Message(models.Model):
     chat_session = models.ForeignKey(ChatSession, on_delete=models.CASCADE, related_name="message")
@@ -81,3 +92,21 @@ class Message(models.Model):
     message = models.TextField()
     timestamp = models.DateTimeField(auto_now_add=True)
     is_customer_care = models.BooleanField(default=False)
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+
+        # Trigger Pusher evebt
+        pusher_client.trigger(
+            f"chat_{self.chat_session.id}",
+            'new_message',
+            {
+                'sender': self.sender.username,
+                'message': self.message,
+                'timestamp': self.timestamp.isoformat()
+            }
+        )
+
+    def __str__(self):
+        return f"Message from {self.sender} in current session: {self.chat_session.id}"
+    

@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import User, KYC
+from .models import User, KYC, KYCDocument
 import random
 from django.core.mail import send_mail
 from django.db import transaction
@@ -71,7 +71,7 @@ class KYCSerializer(serializers.ModelSerializer):
     class Meta:
         model = KYC
         fields = ['full_name', 'date_of_birth', 'address', 'identification_number', 
-                  'identification_type', 'id_document', 'verification_status']
+                  'identification_type', 'verification_status']
     
     def validate_identification_number(self, value):
         # Check if the value is a valid 10 digit number
@@ -89,4 +89,10 @@ class KYCSerializer(serializers.ModelSerializer):
         
         # if it passes the check, return the value
         return value
-        
+
+class KYCDocumentSerializer(serializers.ModelSerializer):
+    id_document = serializers.FileField()
+    
+    class Meta:
+        model = KYCDocument
+        fields = ['id_document']

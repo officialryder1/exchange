@@ -1,7 +1,7 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from rest_framework import permissions
-from .views import UserViewSet, LoginView, KYCViewSet, CreateChatSessionView, SendMessageView, GetMessageView
+from .views import UserViewSet, LoginView, KYCViewSet, CreateChatSessionView, SendMessageView, GetMessageView, KYCDocumentVIew
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 
@@ -28,6 +28,9 @@ schema_view = get_schema_view(
 urlpatterns = [
     path('', include(router.urls)),
     path('token/', LoginView.as_view(), name='token_obtain_pair'),
+
+    # KYC Document upload
+    path('upload_document/', KYCDocumentVIew.as_view(), name="upload_documents"),
 
     #Chat for Customer Care
     path('chat/create/', CreateChatSessionView.as_view(), name='create_chat_session'),
