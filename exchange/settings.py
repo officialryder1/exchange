@@ -46,6 +46,8 @@ INSTALLED_APPS = [
 
     # exchange
     'main',
+    'kyc',
+    'custormer_support',
     
     # Rest_framework
     'rest_framework',
