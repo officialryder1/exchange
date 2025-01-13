@@ -12,10 +12,11 @@ from django.contrib.auth import authenticate
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['email', 'password', 'fund_password', 'verification_code', 'invitation_code']
+        fields = ['email', 'password', 'fund_password', 'verification_code', 'invitation_code', 'wallet_balance']
         extra_kwargs = {
             'password': { 'write_only': True},
-            'fund_password': {'write_only': True}
+            'fund_password': {'write_only': True},
+            'wallet_balance': {'read_only': True}
         }
 
 

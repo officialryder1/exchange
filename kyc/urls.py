@@ -8,7 +8,7 @@ from drf_yasg import openapi
 
 # Create a router for registration
 router = DefaultRouter()
-router.register(r'kyc', KYCViewSet)
+router.register(r'', KYCViewSet)
 
 # schema_view = get_schema_view(
 #     openapi.Info(

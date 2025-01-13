@@ -4,7 +4,7 @@ from .serializer import UserSerializer, LoginSerializer
 from rest_framework import viewsets, status, permissions
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
-from rest_framework.decorators import action, api_view
+from rest_framework.decorators import action, api_view, permission_classes
 from rest_framework.views import APIView
 from django.db import transaction
 from django.contrib.auth import authenticate
@@ -81,17 +81,23 @@ class LoginView(APIView):
             return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
 
-# class SendMailView(APIView):
-#     def post(self, request):
-#         token = random.randint(100000, 999999)
-#         subject = "Your Verification Code"
-#         message = f" Your verification code is {token}"
-#         recipient_list = request.data.get('email')
+from decimal import Decimal
 
-#         if not subject or not message or not recipient_list:
-#             return Response({"error": "All fields are required"}, status=status.HTTP_400_BAD_REQUEST)
-#         try:
-#             send_mail(subject, message, recipient_list)
-#             return Response({"success": "Email sent successfully"}, status=status.HTTP_200_OK)
-#         except Exception as e:
-#             return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+# Purpose of this function will be for bonus and offer to new users and any other reason
+# and can be used to trade only and can't withdraw or used to buy coin
+class ChargeWalletView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+    
+    def post(self, request):
+        user = request.user
+        amount = request.data.get('amount')
+
+        if not amount:
+            return Response({"error": "Provide an amount to charge"}, status=status.HTTP_400_BAD_REQUEST)
+        try:
+            user.wallet_balance += Decimal(amount)
+            user.save()
+            return Response({'message': f"wallet successfully charged with {amount}"}, status=status.HTTP_200_OK)
+        except ValueError:
+            return Response({"error": "Please provide a valid amount."}, status=status.HTTP_400_BAD_REQUEST)

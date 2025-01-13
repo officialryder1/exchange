@@ -44,10 +44,12 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    # exchange
+    # exchange app
     'main',
     'kyc',
     'custormer_support',
+    'crypto',
+    'wallet',
     
     # Rest_framework
     'rest_framework',
@@ -95,7 +97,7 @@ WSGI_APPLICATION = 'exchange.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-DEVELOPMENT_COMMANDS = {'shell', 'test',}
+DEVELOPMENT_COMMANDS = {'shell', 'test', 'runserver', 'makemigrations', 'migrate'}
 
 # Database Configuration
 if set(sys.argv) & DEVELOPMENT_COMMANDS:
