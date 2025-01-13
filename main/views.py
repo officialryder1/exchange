@@ -1,29 +1,32 @@
-from django.shortcuts import render
 from .models import User
 from .serializer import UserSerializer, LoginSerializer
+from .auths import decode_access_token
+
 from rest_framework import viewsets, status, permissions
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.decorators import action, api_view, permission_classes
 from rest_framework.views import APIView
-from django.db import transaction
-from django.contrib.auth import authenticate
-import logging
-from .mail import send_mail
-import random
-
-from drf_yasg.utils import swagger_auto_schema
-from drf_yasg import openapi
-from .auths import decode_access_token
-from django.contrib.auth import get_user_model
+from rest_framework.throttling import UserRateThrottle
 from rest_framework_simplejwt.tokens import AccessToken
+
+from django.db import transaction
+import logging
+
+from drf_yasg import openapi
+from drf_yasg.utils import swagger_auto_schema
+
 
 logger = logging.getLogger(__name__)
 
+class CustomRateThrottle(UserRateThrottle):
+    rate = '5/minute' #5 requests per minute
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
+
+    throttle_classes = [CustomRateThrottle]
 
     @action(detail=False, methods=['post'])
     @transaction.atomic
@@ -45,6 +48,9 @@ class UserViewSet(viewsets.ModelViewSet):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class LoginView(APIView):
+
+    throttle_classes = [CustomRateThrottle]
+    
     def post(self, request):
         serializer = LoginSerializer(data=request.data)
         if serializer.is_valid():
