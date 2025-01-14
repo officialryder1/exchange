@@ -177,17 +177,31 @@ MEDIA_URK = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 CORS_ALLOW_CREDENTIALS = True
-# CORS_ALLOWED_ORIGINS = [
-#     'http://localhost:5173',
-#     'https://dbscig.vercel.app'
-# ]
-# CSRF_TRUSTED_ORIGINS = [
-#     'http://localhost:5173', 
-#     'https://dbscig.vercel.app'
-# ]
+CORS_ALLOWED_ORIGINS = [
+    'http://localhost:5173',
+    'https://dbscig.vercel.app'
+]
+CSRF_TRUSTED_ORIGINS = [
+    'http://localhost:5173', 
+    'https://dbscig.vercel.app'
+]
 
-CORS_ALLOWED_ALL_ORIGINS = True
-CRSF_TRUSTED_ALL_ORIGINS = True
+CORS_ALLOW_METHODS = (
+    "DELETE",
+    "GET",
+    "OPTIONS",
+    "PATCH",
+    "POST",
+    "PUT",
+)
+CORS_ALLOW_HEADERS = (
+    "accept",
+    "authorization",
+    "content-type",
+    "user-agent",
+    "x-csrftoken",
+    "x-requested-with",
+)
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
