@@ -1,5 +1,5 @@
 from .models import User
-from .serializer import UserSerializer, LoginSerializer
+from .serializer import UserSerializer, LoginSerializer, VerificationSerializer
 from .auths import decode_access_token
 
 from rest_framework import viewsets, status, permissions
@@ -13,6 +13,8 @@ from rest_framework_simplejwt.tokens import AccessToken
 from django.db import transaction
 import logging
 
+
+
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
 
@@ -20,7 +22,7 @@ from drf_yasg.utils import swagger_auto_schema
 logger = logging.getLogger(__name__)
 
 class CustomRateThrottle(UserRateThrottle):
-    rate = '5/minute' #5 requests per minute
+    rate = '20/minute' #5 requests per minute
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
@@ -46,6 +48,15 @@ class UserViewSet(viewsets.ModelViewSet):
                 return Response({"error": "Something went wrong during registration"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         logger.warning("Invalid registration data provided.")
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class VerifyUserView(APIView):
+    def post(self, request, *args, **kwargs):
+        serializer = VerificationSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({"message": "Account verified successfully."}, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 class LoginView(APIView):
 

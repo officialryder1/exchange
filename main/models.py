@@ -28,9 +28,10 @@ class User(AbstractUser):
     username = None
     email = models.EmailField(unique=True)
     fund_password = models.CharField(max_length=255)
-    verification_code = models.CharField(max_length=6)
+    verification_code = models.CharField(max_length=6, blank=True, null=True)
     invitation_code = models.CharField(max_length=255, null=True, blank=True)
     wallet_balance = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    is_verify = models.BooleanField(default=False)
 
     # Change related_name for groups and user_permissions to avoid conflicts
     groups = models.ManyToManyField(
