@@ -2,7 +2,7 @@ from .models import User
 from .serializer import UserSerializer, LoginSerializer, VerificationSerializer
 from .auths import decode_access_token
 
-from rest_framework import viewsets, status, permissions
+from rest_framework import viewsets, status, permissions, generics
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.decorators import action, api_view, permission_classes
@@ -49,7 +49,7 @@ class UserViewSet(viewsets.ModelViewSet):
         logger.warning("Invalid registration data provided.")
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-class VerifyUserView(APIView):
+class VerifyUserView(generics.CreateAPIView):
     serializer_class = VerificationSerializer
 
     def post(self, request, *args, **kwargs):
