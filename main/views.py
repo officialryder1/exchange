@@ -45,7 +45,7 @@ class UserViewSet(viewsets.ModelViewSet):
                 }, status=status.HTTP_201_CREATED)
             except Exception as e:
                 logger.error(f"Error during user registration: {e}")
-                return Response({"error": "Something went wrong during registration"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+                return Response({"message": "Something went wrong during registration"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         logger.warning("Invalid registration data provided.")
         return Response({'message': serializer
         .errors}, status=status.HTTP_400_BAD_REQUEST)
@@ -79,7 +79,7 @@ class LoginView(APIView):
     def get(self, request):
         token = request.data.get('token')
         if not token:
-            return Response({"error": "Token is required!"}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"message": "Token is required!"}, status=status.HTTP_400_BAD_REQUEST)
         
         try:
             access_token = AccessToken(token)
