@@ -88,7 +88,7 @@ class VerificationSerializer(serializers.Serializer):
         attrs['user'] = user
         return attrs
     
-    def update(self, instance, validated_data):
+    def create(self, instance, validated_data):
         user = validated_data['user']
         user.is_verify = True
         user.verification_code = None
