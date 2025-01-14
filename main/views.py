@@ -47,7 +47,8 @@ class UserViewSet(viewsets.ModelViewSet):
                 logger.error(f"Error during user registration: {e}")
                 return Response({"error": "Something went wrong during registration"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         logger.warning("Invalid registration data provided.")
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response({'message': serializer
+        .errors}, status=status.HTTP_400_BAD_REQUEST)
 
 class VerifyUserView(generics.CreateAPIView):
     serializer_class = VerificationSerializer
@@ -56,7 +57,7 @@ class VerifyUserView(generics.CreateAPIView):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
-        return Response({"detail": "Email verified successfully"})
+        return Response({"message": "Email verified successfully"})
 
 
 class LoginView(APIView):
@@ -72,8 +73,8 @@ class LoginView(APIView):
                 'refresh': str(refresh),
                 'access': str(refresh.access_token),
             }, status=status.HTTP_200_OK)
-        return Response(serializer
-        .errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response({'message': serializer
+        .errors}, status=status.HTTP_400_BAD_REQUEST)
     
     def get(self, request):
         token = request.data.get('token')
@@ -96,7 +97,7 @@ class LoginView(APIView):
                 'kyc_status': kyc_status
             }, status=status.HTTP_200_OK)
         except Exception as e:
-            return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"message": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
 
 from decimal import Decimal
@@ -118,4 +119,4 @@ class ChargeWalletView(APIView):
             user.save()
             return Response({'message': f"wallet successfully charged with {amount}"}, status=status.HTTP_200_OK)
         except ValueError:
-            return Response({"error": "Please provide a valid amount."}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"message": "Please provide a valid amount."}, status=status.HTTP_400_BAD_REQUEST)
