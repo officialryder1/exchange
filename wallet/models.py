@@ -16,3 +16,13 @@ class Wallet(models.Model):
 
     def __str__(self):
         return f"{self.user.email} - {self.crypto.name}"
+
+class Transaction(models.Model):
+    wallet = models.ForeignKey(Wallet, on_delete=models.CASCADE)
+    amount = models.DecimalField(max_digits=10, decimal_places=2)
+    transaction_type = models.CharField(max_length=10, choices=[('deposit', 'Deposit'), ('withdrawal', 'Withdrawal')])
+    status = models.CharField(max_length=10, default='Pending')
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Transition: {self.wallet} - status: {self.status}"

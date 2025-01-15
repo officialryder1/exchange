@@ -97,7 +97,7 @@ WSGI_APPLICATION = 'exchange.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-DEVELOPMENT_COMMANDS = {'shell', 'test', 'runserver'}
+DEVELOPMENT_COMMANDS = {'shell', 'test', 'runserver', 'makemigrations', 'migrate'}
 
 # Database Configuration
 if set(sys.argv) & DEVELOPMENT_COMMANDS:

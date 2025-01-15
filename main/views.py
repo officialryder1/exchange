@@ -94,7 +94,9 @@ class LoginView(APIView):
             return Response({
                 "user_id": user.id,
                 "email": user.email,
-                'kyc_status': kyc_status
+                'is_verify': user.is_verify,
+                'kyc_status': kyc_status,
+                'wallet_balance': user.wallet_balance,
             }, status=status.HTTP_200_OK)
         except Exception as e:
             return Response({"message": str(e)}, status=status.HTTP_400_BAD_REQUEST)
