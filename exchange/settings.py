@@ -50,14 +50,19 @@ INSTALLED_APPS = [
     'custormer_support',
     'crypto',
     'wallet',
+    'c2c',
     
     # Rest_framework
     'rest_framework',
     'rest_framework_simplejwt',
+    
     'drf_yasg',
 
      # corsheaders
     'corsheaders',
+
+    # Oauth
+    'social_django'
 ]
 
 MIDDLEWARE = [
@@ -71,6 +76,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'social_django.middleware.SocialAuthExceptionMiddleware',
 ]
 
 ROOT_URLCONF = 'exchange.urls'
@@ -117,9 +123,16 @@ if 'runserver' not in sys.argv and 'shell' not in sys.argv:
     DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
 
 
+AUTHENTICATION_BACKEND = [
+    'social_core.backends.google.GoogleOAuth2',
+    'django.contrib.auth.backends.ModelBackend',
+]
+
 # REST FRAMEWORK
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.TokenAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
     'DEFAULT_THROTTLE_CLASSES': [
@@ -128,9 +141,25 @@ REST_FRAMEWORK = {
         'rest_framework.throttling.AnonRateThrottle',
     ],
     "DEFAULT_THROTTLE_RATES": {
-        'user': '100/day',
-        'anon': '10/hour'
+        'user': '1000/day',
+        'anon': '100/hour'
     }
+}
+
+# SOCIAL AUTH SETTINGS
+
+# SOCIALACCOUNT_PROVIDERS = {
+#     'google': {
+#         'SCOPE': ['email', 'profile'],
+#         'AUTH_PARAMS': {'access_type': 'online'},
+#     }
+# }
+
+from datetime import timedelta
+# JWT LIFESPAN
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(hours=1),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
 }
 
 
@@ -179,11 +208,13 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:5173',
-    'https://dbscig.vercel.app'
+    'https://dbscig.vercel.app',
+    'http://localhost:4173'
 ]
 CSRF_TRUSTED_ORIGINS = [
     'http://localhost:5173', 
-    'https://dbscig.vercel.app'
+    'https://dbscig.vercel.app',
+    'http://localhost:4173'
 ]
 
 CORS_ALLOW_METHODS = (
@@ -202,10 +233,17 @@ CORS_ALLOW_HEADERS = (
     "x-csrftoken",
     "x-requested-with",
 )
+
+SECURE_CROSS_ORIGIN_OPENER_POLICY = None
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = config('CLIENT_ID') 
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRE = config('CLIENT_SECRET')
+SOCIAL_AUTH_GOOGLE_OAUTH2_REDIRECT_URI = 'http://localhost:8000/api/auth/google/callback'
+GOOGLE_OAUTH2_TOKEN_URI = 'https://oauth2.googleapis.com/token'
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'

@@ -16,5 +16,8 @@ urlpatterns = [
     path('', include(router.urls)),
     path('token/', LoginView.as_view(), name='token_obtain_pair'),
     path('verify-email/', VerifyUserView.as_view(), name='verify-user'),
-    path('deposit/',ChargeWalletView.as_view(), name="deposit_wallet")
+    path('deposit/',ChargeWalletView.as_view(), name="deposit_wallet"),
+
+    #GOOGLE AUTH
+    path('google-auth/', include('social_django.urls', namespace='social')),
 ]

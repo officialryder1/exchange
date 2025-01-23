@@ -42,6 +42,7 @@ urlpatterns = [
     path('api/customer-care/', include('custormer_support.urls')),
     path('api/crypto/', include('crypto.urls')),
     path('api/wallet/', include('wallet.urls')),
+    path('api/c2c/', include('c2c.urls')),
     path('api/swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui')
 ]+static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser, BaseUserManager, PermissionsMixin
+import random
 
 
 class CustomUserManager(BaseUserManager):
@@ -23,15 +24,24 @@ class CustomUserManager(BaseUserManager):
 
         return self.create_user(email, password, **extra_fields)
 
+USER_ROLE = (
+    ('User', 'user'),
+    {'Merchant', 'merchant'},
+    ('Admin', 'admin')
+)
+
+UUID = random.randint(100000, 999999)
 class User(AbstractUser):
     # Add your custom fields if any
     username = None
     email = models.EmailField(unique=True)
     fund_password = models.CharField(max_length=255)
     verification_code = models.CharField(max_length=6, blank=True, null=True)
+    user_role = models.CharField(max_length=8, choices=USER_ROLE, default='user')
     invitation_code = models.CharField(max_length=255, null=True, blank=True)
     wallet_balance = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     is_verify = models.BooleanField(default=False)
+    UUID = models.CharField(max_length=6, default=UUID)
 
     # Change related_name for groups and user_permissions to avoid conflicts
     groups = models.ManyToManyField(
