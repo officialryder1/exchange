@@ -210,12 +210,13 @@ CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:5173',
     'https://dbscig.vercel.app',
-    'http://localhost:4173'
+    'https://ryderx.vercel.app'
+    
 ]
 CSRF_TRUSTED_ORIGINS = [
     'http://localhost:5173', 
     'https://dbscig.vercel.app',
-    'http://localhost:4173'
+    'https://ryderx.vercel.app'
 ]
 
 CORS_ALLOW_METHODS = (
