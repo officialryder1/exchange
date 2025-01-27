@@ -37,12 +37,13 @@ schema_view = get_schema_view(
 )
 urlpatterns = [
     path('admin/', admin.site.urls), 
-    path('api/', include('main.urls')),
+    path('api/auth/', include('main.urls')),
     path('api/kyc/', include('kyc.urls')),
     path('api/customer-care/', include('custormer_support.urls')),
     path('api/crypto/', include('crypto.urls')),
-    path('api/wallet/', include('wallet.urls')),
+    path('api/wallets/', include('wallet.urls')),
     path('api/c2c/', include('c2c.urls')),
+    path('api/transfer/', include('transaction.urls')),
     path('api/swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui')
 ]+static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

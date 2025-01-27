@@ -50,7 +50,8 @@ INSTALLED_APPS = [
     'custormer_support',
     'crypto',
     'wallet',
-    'c2c',
+    'c2c',\
+    'transaction',
     
     # Rest_framework
     'rest_framework',
